@@ -437,8 +437,109 @@ code {
 </ul>
 </li>
 </ul>
+<h3 id="%E4%BA%A4%E4%BA%92%E8%AE%BE%E8%AE%A1">交互设计</h3>
+<h4 id="%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5">用户输入</h4>
+<ul>
+<li>添加一个todo</li>
+</ul>
+<pre class="hljs"><code><div>add &lt;todo-name&gt;
+fail: &lt;why&gt;
+</div></code></pre>
+<ul>
+<li>完成一个todo</li>
+</ul>
+<pre class="hljs"><code><div>complete &lt;todo-id&gt;
+fail: &lt;why&gt;
+</div></code></pre>
+<ul>
+<li>删除一个todo</li>
+</ul>
+<pre class="hljs"><code><div>delete &lt;todo-id&gt;
+fail: &lt;why&gt;
+</div></code></pre>
+<ul>
+<li>搁置一个todo</li>
+</ul>
+<pre class="hljs"><code><div>shelve &lt;todo-id&gt;
+fail: &lt;why&gt;
+</div></code></pre>
+<ul>
+<li>完全删除一个todo</li>
+</ul>
+<pre class="hljs"><code><div>remove &lt;todo-id&gt;
+fail: &lt;why&gt;
+</div></code></pre>
+<h3 id="%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1">架构设计</h3>
+<ul>
+<li>应用应该包含哪些行为？
+<ul>
+<li>与用户交互
+<ul>
+<li>命令行参数解析</li>
+<li>正确和错误的结果输出</li>
+</ul>
+</li>
+<li>实现用户的指令
+<ul>
+<li>添加一个todo</li>
+<li>完成一个todo</li>
+<li>删除一个todo</li>
+<li>搁置一个todo</li>
+<li>完全删除一个todo</li>
+</ul>
+</li>
+<li>与数据交互
+<ul>
+<li>数据模型定义</li>
+<li>数据的持久化
+<ul>
+<li>json文件？</li>
+</ul>
+</li>
+<li>怎么读取写入？
+<ul>
+<li>文件读写</li>
+<li>模型映射（序列化与反序列化）
+<ul>
+<li>对象可以变成json</li>
+<li>json可以变成对象</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>基于上述行为，应用应该包含哪些模块？
+<ul>
+<li>命令行接口层</li>
+<li>程序接口层（封装所有程序行为，除了与用户交互的部分）</li>
+<li>业务逻辑层（封装各种功能）</li>
+<li>数据存储层（封装数据的读写）</li>
+<li>数据模型层（封装数据的结构）</li>
+</ul>
+</li>
+<li>模块间的关系？谁依赖谁？</li>
+</ul>
+<pre><code class="language-mermaid"><div class="mermaid">graph LR
+  CLI[命令行接口层<br>功能：解析用户输入<br>文件：main.rs]
+  API[程序接口层<br>功能：处理命令<br>文件：api.rs]
+  BL[业务逻辑层<br>功能：管理任务<br>文件：logic.rs]
+  DS[数据存储层<br>功能：读写数据<br>文件：storage.rs]
+  DM[数据模型层<br>功能：定义数据结构<br>文件：model.rs]
+
+  CLI -->|main.rs调用| API
+  API -->|api.rs调用| BL
+  BL -->|logic.rs调用| DS
+  DS -->|storage.rs调用| DM
+</div></code></pre>
 <h3 id="%E5%8A%9F%E8%83%BD%E5%AF%B9%E5%BA%94%E7%95%8C%E9%9D%A2">功能对应界面</h3>
-<p><img src="images/add_task.png" alt="Alt text"></p>
+<p><img src="images/add_task.png" alt="add_task">
+<img src="images/complete_task.png" alt="complete_task">
+<img src="images/delete_task.png" alt="delete_task">
+<img src="images/shelve_task.png" alt="shelve_task">
+<img src="images/trash_task.png" alt="trash_task"></p>
 
 </body>
 </html>
