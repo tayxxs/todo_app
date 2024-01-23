@@ -120,6 +120,164 @@ graph LR
   DS -->|storage.rs调用| DM
 ```
 
+### 接口设计
+#### 命令行接口层
+提供对用户的操作指令，调用下层接口</br>
+帮助文档
+```bash
+rtd -h
+rtd --help
+```
+添加一个todo
+```bash
+rtd -a <item-name>
+rtd --add <item-name>
+```
+列出所有未完成的todo
+```bash
+rtd -l
+rtd --list
+rtd -l uncompleted
+rtd --list uncompleted
+```
+完成一个todo
+```bash
+rtd -c <item-id>
+rtd --complete <item-id>
+```
+列出所有完成的todo
+```bash
+rtd -l completed
+rtd --list completed
+```
+标记一个todo为未完成
+```bash
+rtd -u <item-id>
+rtd --uncomplete <item-id>
+```
+搁置一个todo
+```bash
+rtd -s <item-id>
+rtd --shelve <item-id>
+```
+列出所有搁置的todo
+```bash
+rtd -l shelved
+rtd --list shelved
+```
+删除一个todo
+```bash
+rtd -d <item-id>
+rtd --delete <item-id>
+```
+列出所有已删除的todo
+```bash
+rtd -l deleted
+rtd --list deleted
+```
+物理删除一个todo
+```bash
+rtd --destory <item-id>
+```
+把一个todo从回收站恢复
+```bash
+rtd -r <item-id>
+rtd --restore <item-id>
+```
+清空回收站
+```bash
+rtd --destory-all
+```
+列出所有todo
+```bash
+rtd -l all
+rtd --list all
+```
+
+#### 程序接口层
+把所有程序逻辑统一集中到这里，统一对外提供
+
+#### 业务逻辑层
+使用以下形式定义接口
+```rust
+function_name(input) -> output
+```
+添加一个todo
+```rust
+add_item(item_name) -> result_message
+```
+列出所有未完成的todo
+```rust
+list_uncompleted_items() -> result_message
+```
+完成一个todo
+```rust
+complete_item(item_id) -> result_message
+```
+列出所有完成的todo
+```rust
+list_completed_items() -> result_message
+```
+标记一个todo为未完成
+```rust
+uncomplete_item(item_id) -> result_message
+```
+搁置一个todo
+```rust
+shelve_item(item_id) -> result_message
+```
+列出所有搁置的todo
+```rust
+list_shelved_items() -> result_message
+```
+删除一个todo
+```rust
+delete_item(item_id) -> result_message
+```
+列出所有已删除的todo
+```rust
+list_deleted_items() -> result_message
+```
+物理删除一个todo
+```rust
+destory_item(item_id) -> result_message
+```
+把一个todo从回收站恢复
+```rust
+restore_item(item_id) -> result_message
+```
+清空回收站
+```rust
+destory_all_items() -> result_message
+```
+列出所有todo
+```rust
+list_all_items() -> result_message
+```
+
+#### 数据存储层
+定义一个todo的属性和行为
+```rust
+item {
+  id: u32,
+  name: String,
+  status: ItemStatus,
+  create_time: DateTime,
+  complete_time: DateTime,
+  shelve_time: DateTime,
+  delete_time: DateTime,
+
+  new(id, name,status, create_time, complete_time, shelve_time, delete_time),
+  beautify(), // 格式化显示信息
+  to_string(), // 转换成字符串
+  from_string(), // 从字符串转换
+  to_json(), // 转换成json
+  from_json(), // 从json转换
+}
+```
+
+
+
 
 
 
@@ -129,3 +287,4 @@ graph LR
 ![delete_task](images/delete_task.png)
 ![shelve_task](images/shelve_task.png)
 ![trash_task](images/trash_task.png)
+

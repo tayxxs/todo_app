@@ -1,3 +1,4 @@
+use todo_app::add_item;
 fn main() {
-    println!("Hello, world!");
+    add_item();
 }

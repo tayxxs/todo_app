@@ -534,6 +534,129 @@ fail: &lt;why&gt;
   BL -->|logic.rs调用| DS
   DS -->|storage.rs调用| DM
 </div></code></pre>
+<h3 id="%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1">接口设计</h3>
+<h4 id="%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%8E%A5%E5%8F%A3%E5%B1%82">命令行接口层</h4>
+<p>提供对用户的操作指令，调用下层接口</br>
+帮助文档</p>
+<pre class="hljs"><code><div>rtd -h
+rtd --<span class="hljs-built_in">help</span>
+</div></code></pre>
+<p>添加一个todo</p>
+<pre class="hljs"><code><div>rtd -a &lt;item-name&gt;
+rtd --add &lt;item-name&gt;
+</div></code></pre>
+<p>列出所有未完成的todo</p>
+<pre class="hljs"><code><div>rtd -l
+rtd --list
+rtd -l uncompleted
+rtd --list uncompleted
+</div></code></pre>
+<p>完成一个todo</p>
+<pre class="hljs"><code><div>rtd -c &lt;item-id&gt;
+rtd --complete &lt;item-id&gt;
+</div></code></pre>
+<p>列出所有完成的todo</p>
+<pre class="hljs"><code><div>rtd -l completed
+rtd --list completed
+</div></code></pre>
+<p>标记一个todo为未完成</p>
+<pre class="hljs"><code><div>rtd -u &lt;item-id&gt;
+rtd --uncomplete &lt;item-id&gt;
+</div></code></pre>
+<p>搁置一个todo</p>
+<pre class="hljs"><code><div>rtd -s &lt;item-id&gt;
+rtd --shelve &lt;item-id&gt;
+</div></code></pre>
+<p>列出所有搁置的todo</p>
+<pre class="hljs"><code><div>rtd -l shelved
+rtd --list shelved
+</div></code></pre>
+<p>删除一个todo</p>
+<pre class="hljs"><code><div>rtd -d &lt;item-id&gt;
+rtd --delete &lt;item-id&gt;
+</div></code></pre>
+<p>列出所有已删除的todo</p>
+<pre class="hljs"><code><div>rtd -l deleted
+rtd --list deleted
+</div></code></pre>
+<p>物理删除一个todo</p>
+<pre class="hljs"><code><div>rtd --destory &lt;item-id&gt;
+</div></code></pre>
+<p>把一个todo从回收站恢复</p>
+<pre class="hljs"><code><div>rtd -r &lt;item-id&gt;
+rtd --restore &lt;item-id&gt;
+</div></code></pre>
+<p>清空回收站</p>
+<pre class="hljs"><code><div>rtd --destory-all
+</div></code></pre>
+<p>列出所有todo</p>
+<pre class="hljs"><code><div>rtd -l all
+rtd --list all
+</div></code></pre>
+<h4 id="%E7%A8%8B%E5%BA%8F%E6%8E%A5%E5%8F%A3%E5%B1%82">程序接口层</h4>
+<p>把所有程序逻辑统一集中到这里，统一对外提供</p>
+<h4 id="%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E5%B1%82">业务逻辑层</h4>
+<p>使用以下形式定义接口</p>
+<pre class="hljs"><code><div>function_name(input) -&gt; output
+</div></code></pre>
+<p>添加一个todo</p>
+<pre class="hljs"><code><div>add_item(item_name) -&gt; result_message
+</div></code></pre>
+<p>列出所有未完成的todo</p>
+<pre class="hljs"><code><div>list_uncompleted_items() -&gt; result_message
+</div></code></pre>
+<p>完成一个todo</p>
+<pre class="hljs"><code><div>complete_item(item_id) -&gt; result_message
+</div></code></pre>
+<p>列出所有完成的todo</p>
+<pre class="hljs"><code><div>list_completed_items() -&gt; result_message
+</div></code></pre>
+<p>标记一个todo为未完成</p>
+<pre class="hljs"><code><div>uncomplete_item(item_id) -&gt; result_message
+</div></code></pre>
+<p>搁置一个todo</p>
+<pre class="hljs"><code><div>shelve_item(item_id) -&gt; result_message
+</div></code></pre>
+<p>列出所有搁置的todo</p>
+<pre class="hljs"><code><div>list_shelved_items() -&gt; result_message
+</div></code></pre>
+<p>删除一个todo</p>
+<pre class="hljs"><code><div>delete_item(item_id) -&gt; result_message
+</div></code></pre>
+<p>列出所有已删除的todo</p>
+<pre class="hljs"><code><div>list_deleted_items() -&gt; result_message
+</div></code></pre>
+<p>物理删除一个todo</p>
+<pre class="hljs"><code><div>destory_item(item_id) -&gt; result_message
+</div></code></pre>
+<p>把一个todo从回收站恢复</p>
+<pre class="hljs"><code><div>restore_item(item_id) -&gt; result_message
+</div></code></pre>
+<p>清空回收站</p>
+<pre class="hljs"><code><div>destory_all_items() -&gt; result_message
+</div></code></pre>
+<p>列出所有todo</p>
+<pre class="hljs"><code><div>list_all_items() -&gt; result_message
+</div></code></pre>
+<h4 id="%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E5%B1%82">数据存储层</h4>
+<p>定义一个todo的属性和行为</p>
+<pre class="hljs"><code><div>item {
+  id: <span class="hljs-built_in">u32</span>,
+  name: <span class="hljs-built_in">String</span>,
+  status: ItemStatus,
+  create_time: DateTime,
+  complete_time: DateTime,
+  shelve_time: DateTime,
+  delete_time: DateTime,
+
+  new(id, name,status, create_time, complete_time, shelve_time, delete_time),
+  beautify(), <span class="hljs-comment">// 格式化显示信息</span>
+  to_string(), <span class="hljs-comment">// 转换成字符串</span>
+  from_string(), <span class="hljs-comment">// 从字符串转换</span>
+  to_json(), <span class="hljs-comment">// 转换成json</span>
+  from_json(), <span class="hljs-comment">// 从json转换</span>
+}
+</div></code></pre>
 <h3 id="%E5%8A%9F%E8%83%BD%E5%AF%B9%E5%BA%94%E7%95%8C%E9%9D%A2">功能对应界面</h3>
 <p><img src="images/add_task.png" alt="add_task">
 <img src="images/complete_task.png" alt="complete_task">
